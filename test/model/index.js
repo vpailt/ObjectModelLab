@@ -5,7 +5,7 @@ import  { data }  from './sensors_data'
 console.log('lenght ',data.length);
 console.log(data[0].id, ' TimeSeries');
 
-
+//test travis
 describe('Sensor model tests', () => {
     describe('Sensor type', () => {
         let sensorTemp = model.TypeSensor(data[2]);
