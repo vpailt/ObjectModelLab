@@ -1,86 +1,138 @@
 import expect from 'expect';
 
-// import { ??? } from '../../src/model';
-
 import * as model from '../../src/model';
 import  { data }  from './sensors_data'
 console.log('lenght ',data.length);
 console.log(data[0].id, ' TimeSeries');
-let dataArray =[];
-let SensorArray = [];
-//console.log('TEST enum ',model.SensorType.test)
 
-for(let i =0;i<data.length;i++) {
-    if(data[i].data.value===undefined)
-        dataArray.push(new model.TimeSeries(data[i].data.values,data[i].data.labels));
-    else
-        dataArray.push(new model.Datum(data[i].data.value));
-    if(data[i].type=='TEMPERATURE')
-        SensorArray.push(new model.Temperature(data[i].id,data[i].name,dataArray[i]));
-    else if(data[i].type=='DOOR')
-        SensorArray.push(new model.Door(data[i].id,data[i].name,dataArray[i]));
-    else if(data[i].type=='FAN_SPEED')
-        SensorArray.push(new model.Fan_speed(data[i].id,data[i].name,dataArray[i]));
-}
-let modelTimeSeries =new model.TimeSeries(data[0].data.values,data[0].data.labels);
-let modelTemp = new model.Temperature(data[0].id,data[0].name,modelTimeSeries);
-console.log('TEST 1 ',data[0].id,modelTemp.id);
-console.log('TEST 2 ',data[0].name,modelTemp.name);
-console.log('TEST 3 ',data[0].data,modelTemp.data);
-console.log('TEST ULTIME' ,SensorArray[0].toString());
-console.log('TEST ULTIME' ,(SensorArray[0] instanceof model.Temperature));
-var is_same = (SensorArray[0].data.values.length == [ 23, 23, 22, 21, 23, 23, 23, 25, 25 ].length) && SensorArray[0].data.values.every(function(element, index) {
-        return element === [ 23, 23, 22, 21, 23, 23, 23, 25, 25 ][index];
-    });
-console.log("testsetst",is_same);
-/*modelTemp.id = data[0].id;
-console.log('TEST temp ',data[0].id,modelTemp.id);*/
+
 describe('Sensor model tests', () => {
     describe('Sensor type', () => {
+        let sensorTemp = model.TypeSensor(data[2]);
+        let tabSensor = [];
+        for(let d in data)
+            tabSensor.push(model.TypeSensor(d));
+
+        console.log(tabSensor[1]);
+        console.log( tabSensor[4] instanceof model.Temperature);
+
         it('Sensor should be Temperature', () => {
-            expect((SensorArray[0] instanceof model.Temperature)).toBe(true);
+            let sensorTemp = model.TypeSensor(data[0]);
+            expect((sensorTemp instanceof model.Temperature)).toBe(true);
         });
+
         it('should not be Door', () => {
-            expect((SensorArray[0] instanceof model.Door)).toBe(false);
-        });
-        it('should be Fan_speed', () => {
-            expect((SensorArray[0] instanceof model.Fan_speed)).toBe(false);
-        });
-        it('should be Door', () => {
-            expect((SensorArray[1] instanceof model.Door)).toBe(true);
-        });
-        it('should not be Temperature', () => {
-            expect((SensorArray[1] instanceof model.Temperature)).toBe(false);
+            let sensorTemp = model.TypeSensor(data[0]);
+            expect((sensorTemp instanceof model.Door)).toBe(false);
         });
         it('should not be Fan_speed', () => {
-            expect((SensorArray[1] instanceof model.Fan_speed)).toBe(false);
+            let sensorTemp = model.TypeSensor(data[0]);
+            expect((sensorTemp instanceof model.Fan_speed)).toBe(false);
+        });
+        it('should be Door', () => {
+            let sensorTemp = model.TypeSensor(data[1]);
+            expect((sensorTemp instanceof model.Door)).toBe(true);
+        });
+
+        it('should not be Temperature', () => {
+            let sensorTemp = model.TypeSensor(data[1]);
+            expect((sensorTemp instanceof model.Temperature)).toBe(false);
+        });
+        it('should not be Fan_speed', () => {
+            let sensorTemp = model.TypeSensor(data[1]);
+            expect((sensorTemp instanceof model.Fan_speed)).toBe(false);
         });
         it('should be Fan_speed', () => {
-            expect((SensorArray[2] instanceof model.Fan_speed)).toBe(true);
+            let sensorTemp = model.TypeSensor(data[2]);
+            expect((sensorTemp instanceof model.Fan_speed)).toBe(true);
         });
+
         it('should not be Temperature', () => {
-            expect((SensorArray[2] instanceof model.Temperature)).toBe(false);
+            let sensorTemp = model.TypeSensor(data[2]);
+            expect((sensorTemp instanceof model.Temperature)).toBe(false);
         });
         it('should not be Door', () => {
-            expect((SensorArray[2] instanceof model.Door)).toBe(false);
+            let sensorTemp = model.TypeSensor(data[2]);
+            expect((sensorTemp instanceof model.Door)).toBe(false);
         });
 
     });
-    describe('Sensor get and set', () => {
-        it('id should be 1234', () => {
-            expect((SensorArray[0].id===1234)).toBe(true);
+    describe('Data type', () => {
+        it('should be TimeSeries', () => {
+            let sensorTemp = model.TypeSensor(data[0]);
+            expect((sensorTemp.data instanceof model.TimeSeries)).toBe(true);
         });
-        it('name should be \"Température Bureau\"', () => {
-            expect((SensorArray[0].name==="Température Bureau")).toBe(true);
+        it('should not be Datum', () => {
+            let sensorTemp = model.TypeSensor(data[0]);
+            expect((sensorTemp.data instanceof model.Datum)).toBe(false);
         });
-        var is_same = (SensorArray[0].data.values.length == [ 23, 23, 22, 21, 23, 23, 23, 25, 25 ].length)
-            && SensorArray[0].data.values.every(function(element, index) {
-                return element === [ 23, 23, 22, 21, 23, 23, 23, 25, 25 ][index];
+        it('should be Datum', () => {
+            let sensorTemp = model.TypeSensor(data[1]);
+            expect((sensorTemp.data instanceof model.Datum)).toBe(true);
+        });
+        it('should not be TimeSeries', () => {
+            let sensorTemp = model.TypeSensor(data[1]);
+            expect((sensorTemp.data instanceof model.TimeSeries)).toBe(false);
+        });
+        it('should be TimeSeries', () => {
+            let sensorTemp = model.TypeSensor(data[2]);
+            expect((sensorTemp.data instanceof model.TimeSeries)).toBe(true);
+        });
+        it('should not be Datum', () => {
+            let sensorTemp = model.TypeSensor(data[2]);
+            expect((sensorTemp.data instanceof model.Datum)).toBe(false);
+        });
+    });
+    describe('Tests parameters', () => {
+        describe('Sensor :', () => {
+            it('Id should be Integer', () => {
+                expect(() => {
+                    new model.Sensor({"id": "test", "name": "test", "data": {"value": 1}})
+                }).toThrow("Id should be integer");
             });
-        it('values should be [23,23,22,21,23,23,23,25,25]', () => {
-
-            expect(is_same).toBe(true);
+            it('Name should be String', () => {
+                expect(() => {
+                    new model.Sensor({"id": 13, "name": 35, "data": {"value": 1}})
+                }).toThrow("Name should be string");
+            });
+        });
+        describe('Datum :', () => {
+            it('Value should be Integer', () => {
+                let val = 'test';
+                expect( () => {new model.Datum(val)} ).toThrow("Value should be integer");
+            });
         });
 
+        describe('TimeSeries :', () => {
+            let val = [23,23,22,21,23,23,23,25,25];
+            let val2 = 15;
+            let val3 = ['t',23,22,21,23,23,23,25,25];
+            let val4 = [23,22,21,23,23,23,25,25];
+
+            let lab = ["2016-10-19T08:00:00.000Z", "2016-10-19T09:00:00.000Z", "2016-10-19T10:00:00.000Z",
+                "2016-10-19T11:00:00.000Z", "2016-10-19T12:00:00.000Z", "2016-10-19T13:00:00.000Z",
+                "2016-10-19T14:00:00.000Z", "2016-10-19T15:00:00.000Z", "2016-10-19T16:00:00.000Z"];
+            let lab2 = "test";
+
+            let lab3 = [13, "2016-10-19T09:00:00.000Z", "2016-10-19T10:00:00.000Z",
+                "2016-10-19T11:00:00.000Z", "2016-10-19T12:00:00.000Z", "2016-10-19T13:00:00.000Z",
+                "2016-10-19T14:00:00.000Z", "2016-10-19T15:00:00.000Z", "2016-10-19T16:00:00.000Z"];
+
+            it('Values should be an array', () => {
+                expect( () => {new model.TimeSeries(val2,lab)} ).toThrow("values should be an array");
+            });
+            it('Values should be an array of Integer', () => {
+                expect( () => {new model.TimeSeries(val3,lab)} ).toThrow("Values should be integers");
+            });
+            it('Labels should be an array', () => {
+                expect( () => {new model.TimeSeries(val,lab2)} ).toThrow("labels should be an array");
+            });
+            it('Labels should be an array of String', () => {
+                expect( () => {new model.TimeSeries(val,lab3)} ).toThrow("Labels should be strings");
+            });
+            it('Labels and Values should have the same size', () => {
+                expect( () => {new model.TimeSeries(val4,lab)} ).toThrow("values and labels arrays must have the same length");
+            });
+        });
     });
 });
