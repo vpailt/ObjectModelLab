@@ -2,19 +2,10 @@ import expect from 'expect';
 
 import * as model from '../../src/model';
 import  { data }  from './sensors_data'
-console.log('lenght ',data.length);
-console.log(data[0].id, ' TimeSeries');
 
-//test travis
 describe('Sensor model tests', () => {
     describe('Sensor type', () => {
-        let sensorTemp = model.TypeSensor(data[2]);
-        let tabSensor = [];
-        for(let d in data)
-            tabSensor.push(model.TypeSensor(d));
 
-        console.log(tabSensor[1]);
-        console.log( tabSensor[4] instanceof model.Temperature);
 
         it('Sensor should be Temperature', () => {
             let sensorTemp = model.TypeSensor(data[0]);
